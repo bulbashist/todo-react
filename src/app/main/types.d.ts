@@ -3,6 +3,5 @@ export interface ITask {
   title: string;
   description?: string;
   date?: string;
-  isCompleted: boolean;
   isBeingChanged: boolean;
 }

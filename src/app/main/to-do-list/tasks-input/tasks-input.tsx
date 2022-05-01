@@ -19,7 +19,6 @@ function TasksInput() {
       id: uuid(),
       ...data,
       isBeingChanged: false,
-      isCompleted: false,
     };
     dispatch(addTask(task));
   }

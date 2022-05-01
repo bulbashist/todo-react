@@ -10,7 +10,9 @@ import {
   List,
   ListItem,
   ListItemText,
+  Skeleton,
   Stack,
+  Typography,
 } from "@mui/material";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,9 +20,10 @@ import { AppDispatch, RootState } from "../../../../store";
 import { ITask } from "../../types";
 import { Edit, Delete, ExpandMore } from "@mui/icons-material";
 import { deleteTask } from "../../store-slice";
+import { useTasks } from "./useTasks";
 
 function TasksList() {
-  const tasks = useSelector((state: RootState) => state.tasks);
+  const tasks = useTasks();
   const dispatch = useDispatch<AppDispatch>();
 
   function checkSeverity(task: ITask): AlertColor {
@@ -36,7 +39,12 @@ function TasksList() {
   }
 
   return (
-    <Container maxWidth="md">
+    <Container
+      maxWidth="md"
+      sx={{
+        padding: "15px",
+      }}
+    >
       <List>
         {tasks.map((task: ITask) => {
           return (
@@ -77,11 +85,10 @@ function TasksList() {
                   </Stack>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <p>{task.description}</p>
-                  {task.date}
+                  <Typography color="green">{task.description}</Typography>
+                  <Typography textAlign="right">{task.date}</Typography>
                 </AccordionDetails>
               </Accordion>
-              {/* </Alert> */}
             </ListItem>
           );
         })}
