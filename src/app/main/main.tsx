@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import ToDoList from "./to-do-list/to-do-list";
 
 function MainPage() {
