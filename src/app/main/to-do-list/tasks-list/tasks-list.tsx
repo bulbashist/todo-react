@@ -10,13 +10,12 @@ import {
   List,
   ListItem,
   ListItemText,
-  Skeleton,
   Stack,
   Typography,
 } from "@mui/material";
 import React, { Fragment, MouseEvent } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../../store";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../store";
 import { ITask } from "../../types";
 import { Edit, Delete, ExpandMore } from "@mui/icons-material";
 import { changeTask, deleteTask } from "../../store-slice";

@@ -11,7 +11,6 @@ import { v4 as uuid } from "uuid";
 import { AppDispatch } from "../../../../store";
 import { ITask } from "../../types";
 import { addTask } from "../../store-slice";
-import "./tasks-input.scss";
 import { useForm } from "react-hook-form";
 
 type IFormTaskData = Pick<ITask, "date" | "description" | "title">;
