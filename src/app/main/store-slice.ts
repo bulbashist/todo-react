@@ -10,10 +10,10 @@ const tasksSlice = createSlice({
     addTask(state: TasksState, action: PayloadAction<ITask>) {
       return [action.payload, ...state];
     },
-    changeTask(state: TasksState, action: PayloadAction<number>) {
+    changeTask(state: TasksState, action: PayloadAction<ITask>) {
       const stateCopy = [...state];
-      //  let task = stateCopy.find((task) => task.id === action.payload.id);
-      //  task = action.payload;
+      let index = stateCopy.findIndex((task) => task.id === action.payload.id);
+      stateCopy[index] = action.payload;
       return stateCopy;
     },
     deleteTask(state: TasksState, action: PayloadAction<ITask>) {
@@ -27,5 +27,5 @@ const tasksSlice = createSlice({
   },
 });
 
-export const { addTask, deleteTask } = tasksSlice.actions;
+export const { addTask, changeTask, deleteTask } = tasksSlice.actions;
 export default tasksSlice.reducer;

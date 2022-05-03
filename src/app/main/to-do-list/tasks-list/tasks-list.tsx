@@ -14,17 +14,55 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { Fragment, MouseEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../store";
 import { ITask } from "../../types";
 import { Edit, Delete, ExpandMore } from "@mui/icons-material";
-import { deleteTask } from "../../store-slice";
+import { changeTask, deleteTask } from "../../store-slice";
 import { useTasks } from "./useTasks";
 
 function TasksList() {
   const tasks = useTasks();
   const dispatch = useDispatch<AppDispatch>();
+
+  function takeData(e: MouseEvent<HTMLButtonElement>, task: ITask) {
+    e.stopPropagation();
+    if (!task.isBeingChanged) {
+      dispatch(
+        changeTask({
+          ...task,
+          isBeingChanged: true,
+        })
+      );
+      return;
+    } else {
+      //random path cuz MUI and no ref
+      const title = (
+        e.currentTarget.parentElement?.previousElementSibling?.lastElementChild
+          ?.firstElementChild?.firstElementChild as HTMLInputElement
+      ).value;
+      const temp =
+        e.currentTarget.parentElement?.parentElement?.parentElement
+          ?.nextElementSibling?.firstElementChild?.firstElementChild
+          ?.firstElementChild?.firstElementChild;
+      const description = (
+        temp?.firstElementChild?.firstElementChild as HTMLInputElement
+      ).value;
+      const date = (
+        temp?.lastElementChild?.firstElementChild as HTMLInputElement
+      ).value;
+      dispatch(
+        changeTask({
+          ...task,
+          isBeingChanged: false,
+          title,
+          description,
+          date,
+        })
+      );
+    }
+  }
 
   function checkSeverity(task: ITask): AlertColor {
     const date = new Date(Date.parse(task.date!)).getTime();
@@ -73,7 +111,10 @@ function TasksList() {
                       margin: "0px 20px",
                     }}
                   >
-                    <Button variant="contained" onClick={() => {}}>
+                    <Button
+                      variant="contained"
+                      onClick={(e) => takeData(e, task)}
+                    >
                       <Edit />
                     </Button>
                     <Button
@@ -84,9 +125,37 @@ function TasksList() {
                     </Button>
                   </Stack>
                 </AccordionSummary>
-                <AccordionDetails>
-                  <Typography color="green">{task.description}</Typography>
-                  <Typography textAlign="right">{task.date}</Typography>
+                <AccordionDetails
+                  sx={{ display: "flex", flexDirection: "column" }}
+                >
+                  {task.isBeingChanged ? (
+                    <Fragment>
+                      <Input type="text" defaultValue={task.description} />
+                      <Input
+                        type="date"
+                        defaultValue={task.date}
+                        sx={{
+                          display: "block",
+                          alignSelf: "end",
+                          width: "200px",
+                        }}
+                      />
+                    </Fragment>
+                  ) : (
+                    <Fragment>
+                      <Typography
+                        color="green"
+                        sx={{
+                          overflowWrap: "break-word",
+                        }}
+                      >
+                        {task.description !== ""
+                          ? task.description
+                          : "No detailed information provided"}
+                      </Typography>
+                      <Typography textAlign="right">{task.date}</Typography>
+                    </Fragment>
+                  )}
                 </AccordionDetails>
               </Accordion>
             </ListItem>
